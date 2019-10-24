@@ -34,31 +34,48 @@ namespace Interfactura.Web.UI.Models.Utilities
             XmlNodeList nodos = document.GetElementsByTagName("cfdi:Concepto");
             if (nodos is null) return error;
 
-            double nodesTotalSum = 0;
+            decimal nodesTotalSum = 0;
+            
             foreach (XmlNode nodo in nodos)
             {
-                var attrValue = nodo.Attributes.GetNamedItem("Importe").Value;
-                if (Int64.TryParse(attrValue, out long importe))
-                    nodesTotalSum += importe;
+                string attrValue = nodo.Attributes.GetNamedItem("Importe").Value;
+                if (string.IsNullOrWhiteSpace(attrValue)) continue;
+
+                nodesTotalSum+= GetValue(attrValue);
             }
 
-            double SubTotal = GetSubtotal(document);
+            decimal SubTotal = GetSubtotal(document);
             if (SubTotal != nodesTotalSum) return error;
 
             return string.Empty;
         }
 
-        private static double GetSubtotal(XmlDocument document)
+        private static decimal GetValue(string attrValue)
+        {
+            decimal valueToReturn = 0;
+            decimal importe = 0 ;
+
+            var values = attrValue.Split(".");
+            if (values.Length == 0) return 0;
+
+            bool success = decimal.TryParse(values[0], out importe);
+            if (success) valueToReturn += importe;
+
+            if (values.Length == 1) return valueToReturn;
+            success = decimal.TryParse(values[1], out importe);
+            if (success) valueToReturn += (importe/100);
+
+            return valueToReturn;
+        }
+
+        private static decimal GetSubtotal(XmlDocument document)
         {
             XmlNode nodo = document.GetElementsByTagName("cfdi:Comprobante")[0];
             if (nodo is null) return 0;
 
             var subTotal = nodo.Attributes.GetNamedItem("SubTotal").Value;
             if (string.IsNullOrWhiteSpace(subTotal)) return 0;
-
-            if (Int64.TryParse(subTotal, out long subtotalValue))
-                return subtotalValue;
-            else return 0;
+            return GetValue(subTotal);
         }
 
         private static string ValidateDocumentVersion(XmlDocument document)
