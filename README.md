@@ -1,7 +1,7 @@
 # Interfactura
 Código para interfactura
 
-Este es un pequeño ejercicio de codificación que me pidieron realizar antes de ingresar a interfactura:
+Este es un pequeño ejercicio de codificación que me pidieron realizar antes de ingresar a interfactura, el código está hecho en dotnet core version 3.0.
 
 Ejercicios
 1.	(Obligatorio) Crear un proyecto en ASP NET MVC para:
