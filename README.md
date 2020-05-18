@@ -1,6 +1,8 @@
 # Interfactura
 Código para interfactura
 
+Este es un pequeño ejercicio de codificación que me pidieron realizar antes de ingresar a interfactura:
+
 Ejercicios
 1.	(Obligatorio) Crear un proyecto en ASP NET MVC para:
 I.	Mostrar una página de captura de alumnos:
